@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "388071107863",
+    "firebase_url": "https://monitorme-20a44.firebaseio.com",
+    "project_id": "monitorme-20a44",
+    "storage_bucket": "monitorme-20a44.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388071107863:android:1fe15beab9afea26831b52",
+        "android_client_info": {
+          "package_name": "com.example.monitorme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388071107863-h74tmsvnvo106dbn6g83fuauaarjquud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.monitorme",
+            "certificate_hash": "334800fb371fdb54f39bd8751728262fee544682"
+          }
+        },
+        {
+          "client_id": "388071107863-iokbrl31g6kqmfk0rpahd6sor6avt987.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrJJMv5rKZgkHICjE4CRK615DHEFDSK10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388071107863-iokbrl31g6kqmfk0rpahd6sor6avt987.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
