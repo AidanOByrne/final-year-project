@@ -68,8 +68,10 @@ public class AuthenticationActivity extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                // shows message box letting user know they have not been successful
                 aDialog.create();
                 aDialog.show();
+
             }
 
             @Override
