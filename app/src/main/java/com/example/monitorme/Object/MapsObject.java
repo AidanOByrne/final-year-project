@@ -2,6 +2,10 @@ package com.example.monitorme.Object;
 
 import java.io.Serializable;
 
+/// not actually in use
+// ws made for an idea but wasnt capable of running it
+// will be implemented after college
+
 public class MapsObject implements Serializable {
 
     private String  uid;

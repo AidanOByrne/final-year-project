@@ -235,7 +235,7 @@ public class ChatListFragment extends Fragment {
                         }
                     }
                 }
-                //((MainActivity)Objects.requireNonNull(getActivity())).setChatList(chatList);
+                ((MainActivity)Objects.requireNonNull(getActivity())).setChatList(chatList);
 
 
             }
