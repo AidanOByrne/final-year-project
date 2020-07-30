@@ -132,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             // this event listener will listen to see if any data has changed
             // if it has it will parse the information gained
-            // from taking a datasnapshot of the database based on the database reference we created earlier ... mChatInfoDb
+            // from taking a data snapshot of the database based on the database reference we created earlier ... mChatInfoDb
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mChatObject.parseObject(dataSnapshot);
                 // we then call the update chat info view function
@@ -253,7 +253,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (mChatObject.getUserObjectArrayList().size() == 2) {
                     for (UserObject mUser :  mChatObject.getUserObjectArrayList()){
                         if (!mUser.getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                            Glide.with(this)
+                            Glide.with(ChatActivity.this)
                                     .load(mUser.getImage())
                                     .apply(RequestOptions.circleCropTransform().circleCrop())
                                     .into(mImage);
