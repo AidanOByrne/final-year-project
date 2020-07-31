@@ -38,8 +38,8 @@
                     android:layout_gravity="center_vertical"/>
 
             </LinearLayout>
-        </androidx.appcompat.widget.Toolbar>
 
+        </androidx.appcompat.widget.Toolbar>
 
 </RelativeLayout>
 
