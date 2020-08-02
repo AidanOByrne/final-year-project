@@ -119,7 +119,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        // here we are calling different functions that will start when this view is "created" this is why we call them in the onCreate function
+        // here we are calling different functions/methods that will start when this view is "created" this is why we call them in the onCreate function
         initializeMessage();
         initializeMedia();
         getChatMessages();
@@ -177,7 +177,7 @@ public class ChatActivity extends AppCompatActivity {
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                // allows the deleting of values based on child removed
+                // allows the deleting of values based on key value
                 // removes based on the key value
                 int index = keyList.indexOf(dataSnapshot.getKey());
                 messageList.remove(index);

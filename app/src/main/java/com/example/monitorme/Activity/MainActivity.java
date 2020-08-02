@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
 
         mapBtn.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), MapsActivity.class)));
 
-        //checkMapServices();
     }
 
 
