@@ -33,6 +33,11 @@ import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // declare everything we need from the page, variables, image view, text, database references etc
+    // this page is the exat same as the chat config page
+    // we jsut need more things here like status
+    // same principles applied
+    // same comments
     ImageView mBack,
             mConfirm;
 
@@ -60,6 +65,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile_edit);
+
 
         mUser = (UserObject) getIntent().getSerializableExtra("userObject");
 

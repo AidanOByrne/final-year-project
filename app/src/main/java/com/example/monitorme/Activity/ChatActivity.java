@@ -164,10 +164,10 @@ public class ChatActivity extends AppCompatActivity {
                     // we get the key values of the dat snap shot and store them in the key list arrays
                     keyList.add(dataSnapshot.getKey());
                     // we state we want to start the chat layout manager at the last added messsage
-                    // htis is for the user so they dont have to scroll thought the whole chat history
+                    // this is for the user so they dont have to scroll thought the whole chat history
                     mChatLayoutManager.scrollToPosition(messageList.size()-1);
                     // this line of code is responsible for allowing the list to constantly be refreshed
-                    // so the msit recent view is always there
+                    // so the most recent view is always there
                     mChatAdapter.notifyDataSetChanged();
                 }
             }
@@ -208,68 +208,89 @@ public class ChatActivity extends AppCompatActivity {
         if(!mMessage.getText().toString().isEmpty())
             message = mMessage.getText().toString();
 
-
+        // uses the send message java class in the utils folder
         new SendMessage(mChatObject, true, mediaUriList, null, message);
 
+        // set text to null
         mMessage.setText(null);
+        //clear the list
         mediaUriList.clear();
+        // calls mMediaAdapter on data change
         mMediaAdapter.notifyDataSetChanged();
 
 
     }
 
     private void initializeMessage() {
+        // create array list for the messages
         messageList = new ArrayList<>();
+        // get the recylcer view by id
         RecyclerView mChat = findViewById(R.id.messageList);
+        // turn of scrolling on the page
         mChat.setNestedScrollingEnabled(false);
+        // set to not have a set size so it fits all phone types
         mChat.setHasFixedSize(false);
+        // creates a list view layout
         mChatLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayout.VERTICAL, false);
+        // setting the list view to the chat screen
         mChat.setLayoutManager(mChatLayoutManager);
+        // calling the message adapter and attaching the chat object and the message lust to the chat adapter
         mChatAdapter = new MessageAdapter(this, mChatObject, messageList);
+        // setting the adapter to the chat
         mChat.setAdapter(mChatAdapter);
     }
 
     void updateChatInfoViews(){
-
+        // getting the image view and text view by id
         ImageView mImage = findViewById(R.id.chatImage);
         TextView mName = findViewById(R.id.chatName);
 
+        // if name does not equal nothing then set text to the name the name of the user
         if(!mChatObject.getName().equals(""))
             mName.setText(mChatObject.getName());
+        // else get name by users and set it to the text
         else
             mName.setText(mChatObject.getNameByUsers());
 
+        // if the application is nto equal to null then we get the image saved in ic_user ... default image
         if(getApplicationContext()!=null){
             Glide.with(getApplicationContext())
                     .load(getResources().getDrawable(R.drawable.ic_user))
+                    // turn into a circular image
                     .apply(RequestOptions.circleCropTransform().circleCrop())
+                    // set into the chat image we got earlier
                     .into(mImage);
+            // if it equals nothing keep the default image
             if(!mChatObject.getImage().equals(""))
-                Glide.with(this)
+                Glide.with(getApplicationContext())
                         .load(mChatObject.getImage())
                         .apply(RequestOptions.circleCropTransform().override(24, 24))
                         .into(mImage);
             else{
+                // else get the array list to get the image the user has saved
                 if (mChatObject.getUserObjectArrayList().size() == 2) {
                     for (UserObject mUser :  mChatObject.getUserObjectArrayList()){
-                        if (!mUser.getUid().equals(FirebaseAuth.getInstance().getUid())) {
-                            Glide.with(ChatActivity.this)
+                        // we get the users saves image and change it into a circular image
+                        if (!mUser.getUid().equals(FirebaseAuth.getInstance().getUid()))
+                            Glide.with(getApplicationContext())
                                     .load(mUser.getImage())
                                     .apply(RequestOptions.circleCropTransform().circleCrop())
                                     .into(mImage);
-                        }
                     }
                 }
             }
         }
     }
 
-
+    // int vvariable
     int PICK_IMAGE_INTENT = 1;
+    //array list to hold usi lits from firebase
     ArrayList<String> mediaUriList = new ArrayList<>();
 
+    // this is same as initalising the message
     private void initializeMedia() {
         mediaUriList = new ArrayList<>();
+        // getting media list by id
         RecyclerView mMedia = findViewById(R.id.mediaList);
         mMedia.setNestedScrollingEnabled(false);
         mMedia.setHasFixedSize(false);
@@ -279,21 +300,30 @@ public class ChatActivity extends AppCompatActivity {
         mMedia.setAdapter(mMediaAdapter);
     }
 
+    // open the chat configuration page and
     private void openConfig() {
         Intent intent = new Intent(this, ChatConfigActivity.class);
         intent.putExtra("chatObject", mChatObject);
         startActivity(intent);
     }
+    // opening the devices gallery
     private void openGallery() {
+        // declare enw intent
         Intent intent = new Intent();
+        // decvlare as image
         intent.setType("image/*");
+        // allow multiple images to be sent
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(intent.ACTION_GET_CONTENT);
+        // set the action of getting content
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        // start the activity of picking images
         startActivityForResult(Intent.createChooser(intent, "Select Picture(s)"), PICK_IMAGE_INTENT);
     }
 
 
     @Override
+    // this is to check if the result for the image is okay
+    // its a series of checks and then we change the to uri to a string to be then added to the media uri list
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){

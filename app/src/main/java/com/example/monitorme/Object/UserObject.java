@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class UserObject  implements Serializable {
 
+    // getters and setters for everything in the user table
     private String  uid,
             name = "--",
             phone = "--",
@@ -30,6 +31,7 @@ public class UserObject  implements Serializable {
     public void parseObject(DataSnapshot dataSnapshot){
         if(!dataSnapshot.exists()){ return; }
 
+        // get values based on child name and change them to a string
         if(dataSnapshot.child("name").getValue()!=null)
             name = dataSnapshot.child("name").getValue().toString();
         if(dataSnapshot.child("image").getValue()!=null)
@@ -73,21 +75,11 @@ public class UserObject  implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-    //public void setStatus(String status) {
-    //    this.status = status;
-    //}
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    //@Override
-    //public int compareTo(@NonNull Object o) {
-    //    if(((UserObject) o).getUid().equals(uid))
-    //        return 1;
-    //    else
-    //        return 0;
-    //}
-
+    // boolean value to check the user id equals the right user id
     public boolean equals(Object o) {
         if(((UserObject) o).getUid().equals(uid))
             return true;

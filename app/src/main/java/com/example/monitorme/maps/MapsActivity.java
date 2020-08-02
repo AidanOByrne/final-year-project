@@ -31,19 +31,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-//import com.google.android.gms.location.LocationListener;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
+    // create google maps
     private GoogleMap mMap;
 
+    // tag for log
     private static final String TAG = "MapsActivity";
 
+    // image view button
     ImageView mBack;
 
+    // permissions for location tracking
     final static int PERMISSION = 1;
     final static String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION
             , Manifest.permission.ACCESS_FINE_LOCATION};
+
+    // make marker, location manager, string, database reference for later
     MarkerOptions mo;
     Marker marker;
     LocationManager locationManager;
@@ -57,6 +62,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
@@ -65,17 +71,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
 
+        // set location manager to get the location from systems
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        // set title for marker and latitude longitude for later
         mo = new MarkerOptions().position(new LatLng(0, 0)).title("My current location");
+
+        // depends on what sdk is used in the project check build.gradle
+        // then request permission for for location tracking
         if (Build.VERSION.SDK_INT >= 23 && !isPermissionGranted()) {
             requestPermissions(PERMISSIONS, PERMISSION);
         } else requestLocation();
         if (!isLocationEnabled())
+            // show alert
             showAlert(1);
 
-        //back button
+        // back button
         mBack = findViewById(R.id.back);
 
+        // bring you back to main page
         mBack.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -84,6 +97,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    // make alerts and assign the message, title and btn text depending on cases
     private void showAlert(int i) {
         String message, title, btnText;
         if (i == 1) {
@@ -95,6 +109,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             title = "Permission access";
             btnText = "Grant";
         }
+
+        // create dialog for alert dialog
+        // set cancelable so it gets ride of it
+        // set title, set message, set button and create intent to the button
+        // request permissions on button
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setCancelable(false);
         dialog.setTitle(title)
@@ -116,19 +135,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         finish();
                     }
                 });
+        // show dialog
         dialog.show();
     }
 
+    // checks if location is enabled
     private boolean isLocationEnabled() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER);
     }
 
+    // request location
     private void requestLocation() {
+        // create criteria
         Criteria criteria = new Criteria();
+        // set accuracy to the criteria
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        // set power
         criteria.setPowerRequirement(Criteria.POWER_HIGH);
+        // attach location manager with criteria
         String provider = locationManager.getBestProvider(criteria, true);
+        // auto generated when request permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -139,11 +166,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        // set intervals to location listener for updates
         locationManager.requestLocationUpdates(provider, 100, 10, (android.location.LocationListener) this);
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
+    // check if permission was granted or not
     private boolean isPermissionGranted() {
         if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -166,6 +195,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * installed Google Play services and returned to the app.
      */
 
+    // when map loading get the marker and map
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -198,6 +228,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
          */
     }
 
+    // on location change get position based on longitude or latitude
+    // set zoom level to auto zoom on location
+    // create new reference and save the vales to the Database
     @Override
     public void onLocationChanged(Location location) {
         LatLng myCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
@@ -211,6 +244,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    // auto generated but dont need to be used
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 

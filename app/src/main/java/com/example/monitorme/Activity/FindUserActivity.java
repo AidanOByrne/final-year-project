@@ -32,10 +32,12 @@ import java.util.HashMap;
 
 public class FindUserActivity extends AppCompatActivity {
 
+    // create variables
     private RecyclerView mUserList;
     private RecyclerView.Adapter mUserListAdapter;
     private RecyclerView.LayoutManager mUserListLayoutManager;
 
+    // create array lists
     ArrayList<UserObject> userList, contactList;
 
     @Override
@@ -43,6 +45,7 @@ public class FindUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
 
+        //
         contactList= new ArrayList<>();
         userList= new ArrayList<>();
 
@@ -168,6 +171,7 @@ public class FindUserActivity extends AppCompatActivity {
 
         return CountryToPhonePrefix.getPhone(iso);
     }
+
 
     private void initializeRecyclerView() {
         mUserList= findViewById(R.id.userList);

@@ -13,16 +13,20 @@ import java.util.Date;
 
 public class ChatObject implements Serializable, Comparable<ChatObject>{
 
+    // declare new string needed for chat
     private String  chatId,
             lastMessage,
             timestampStr,
             image,
             nameByUsers,
             name;
+    // long for timestamp
     Long timestamp;
 
+    // array list
     private ArrayList<UserObject> userObjectArrayList = new ArrayList<>();
 
+    // constructor
     public ChatObject(String chatId){
         this.chatId = chatId;
         nameByUsers = "";
@@ -30,6 +34,7 @@ public class ChatObject implements Serializable, Comparable<ChatObject>{
         image = "";
     }
 
+    // parse object based on values and change to string from database
     public void parseObject(DataSnapshot dataSnapshot){
         if(!dataSnapshot.exists()){return;}
         if(dataSnapshot.child("image").getValue() != null)
@@ -38,6 +43,7 @@ public class ChatObject implements Serializable, Comparable<ChatObject>{
             name = dataSnapshot.child("name").getValue().toString();
     }
 
+    // getter setter
     public String getChatId() {
         return chatId;
     }
@@ -66,16 +72,21 @@ public class ChatObject implements Serializable, Comparable<ChatObject>{
         return name;
     }
     public String getNameByUsers() {
+        // getting the user based on user id
+        // create string
         String name = "";
+        // create user list
         ArrayList<UserObject> userNameList = new ArrayList<>();
+
 
         for (UserObject mUser : userObjectArrayList){
             if (mUser.getUid().equals(FirebaseAuth.getInstance().getUid()))
                 continue;
-
+            // add users to the array list
             userNameList.add(mUser);
         }
         int i;
+        // get name of users minus the user signed inn
         for (i = 0; i < userNameList.size() - 1; i++){
             name += userNameList.get(i).getName() + ", ";
         }
@@ -86,6 +97,7 @@ public class ChatObject implements Serializable, Comparable<ChatObject>{
         return nameByUsers;
     }
 
+    // getters and setters
     public String getLastMessage() {
         return lastMessage;
     }
@@ -103,12 +115,13 @@ public class ChatObject implements Serializable, Comparable<ChatObject>{
         userObjectArrayList.add(mUser);
     }
 
+    // get date set date format save to timestamp
     private void getDate(){
         DateFormat dateFormat;
         if(DateUtils.isToday(timestamp)){
             dateFormat = new SimpleDateFormat("HH:mm");
         }else{
-            dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         }
 
         Date date = new Date(timestamp);

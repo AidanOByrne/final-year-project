@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChatConfigActivity extends AppCompatActivity implements View.OnClickListener {
+    // declare all the different variables, database references, image view etc we need
     ImageView mBack,
             mConfirm,
             mDelete;
@@ -58,17 +59,21 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
 
         chatObject = (ChatObject) getIntent().getSerializableExtra("chatObject");
 
+        // gets soft input when the window is focused
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         initializeObjects();
 
+        // connect to firebase and get user id
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
 
+        // get info from the users id in the chat table
         mInfoDatabase = FirebaseDatabase.getInstance().getReference().child("chat").child(chatObject.getChatId()).child("info");
 
         getChatInfo();
 
+        // on click listener for hte profile image
         mImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,16 +83,16 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        // delete function for chat based on current chat id
-        // create two connections into the chat table and then the user table
-        // delete the both records from the corosponding tables
-
+        // all the delete information to delete chat
+        // get database references necessary
         mInfoDatabaseDelete = FirebaseDatabase.getInstance().getReference().child("chat").child(chatObject.getChatId());
         mInfoDatabaseUserDelete = FirebaseDatabase.getInstance().getReference().child("user").child(userId).child("chat").child(chatObject.getChatId());
 
         mInfoDatabaseDelete1 = FirebaseDatabase.getInstance().getReference().child("chat");
+        // get the button
         mDelete = findViewById(R.id.chat_delete);
 
+        // set on click listener to remove the vakue from the table then bring you bcak to the home page
         mDelete.setOnClickListener(v -> {
             //mInfoDatabaseDelete.removeValue();
             mInfoDatabaseUserDelete.removeValue();
@@ -96,19 +101,26 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    // make a progress dialog
     ProgressDialog mDialog;
-    public void  showProgressDialog(String message){
+    // initialise the dialog for this activity to be called later
+    public void showProgressDialog(String message){
         mDialog = new ProgressDialog(ChatConfigActivity.this);
         mDialog.setMessage(message);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setCancelable(false);
         //mDialog.show();
     }
+    /*
     public void  dismissProgressDialog(){
         if(mDialog!=null)
             mDialog.dismiss();
     }
 
+     */
+
+    // get the neccessary info
+    // name , image
     private void getChatInfo() {
 
         name = chatObject.getName();
@@ -123,6 +135,8 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
                     .into(mImage);
     }
 
+    // now loop  through and save the information where necessary
+    // using a hash map to put the information in the data base with the correct name convention
     private void saveChatInformation() {
 
         showProgressDialog("Saving Chat Info...");
@@ -136,8 +150,14 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
         if(image != null)
             userInfo.put("image", image);
 
+        // here we actually send the information to the database with the assign names and alues
         mInfoDatabase.updateChildren(userInfo);
 
+        // checks if the vlaue is not null
+        // create file path database reference
+        // add on failure listener to stop the process
+        // on succeess listener to to take a snap shot of the database
+        // get the url thats saved in database and then replace it with new value
         if(resultUri != null) {
             final StorageReference filePath = FirebaseStorage.getInstance().getReference().child("chat_image").child(userId);
 
@@ -175,6 +195,7 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
         }
     }
     @Override
+    // convert the media to a bit map and saves it into the image to be viewed
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -191,6 +212,7 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
         }
     }
     @Override
+    // close the window or save the chat based on what is clicked
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.back:
@@ -203,6 +225,7 @@ public class ChatConfigActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // initialise all objects on the page by id .. get them by id
     private void initializeObjects() {
         mName = findViewById(R.id.name);
         mImage = findViewById(R.id.profileImage);

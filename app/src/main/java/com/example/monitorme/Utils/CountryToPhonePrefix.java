@@ -7,7 +7,7 @@ import java.util.Map;
 // https://stackoverflow.com/questions/10772329/how-to-get-country-phone-prefix-from-iso
 
 // this code is taken from online
-//some kind soul went through all the prefixes of the earht and put them in a nice document
+// some kind soul went through all the prefixes of the earth and put them in a nice document
 public class CountryToPhonePrefix {
 
     public static String getPhone(String code) {
