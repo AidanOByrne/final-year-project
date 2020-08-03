@@ -34,8 +34,8 @@ import java.util.Map;
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     // declare everything we need from the page, variables, image view, text, database references etc
-    // this page is the exat same as the chat config page
-    // we jsut need more things here like status
+    // this page is the exact same as the chat config page
+    // we just need more things here like status
     // same principles applied
     // same comments
     ImageView mBack,

@@ -32,7 +32,10 @@ import java.util.HashMap;
 
 public class FindUserActivity extends AppCompatActivity {
 
-    // create variables
+    // create recycler view variables
+    // array list
+    // adapter
+    // layout manager
     private RecyclerView mUserList;
     private RecyclerView.Adapter mUserListAdapter;
     private RecyclerView.LayoutManager mUserListLayoutManager;
@@ -45,41 +48,55 @@ public class FindUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
 
-        //
+        // new array list to name
         contactList= new ArrayList<>();
         userList= new ArrayList<>();
 
+        // get image views by id
         ImageView mCreate = findViewById(R.id.create);
         ImageView mBack = findViewById(R.id.back);
+        // set on click listener then call necessary method
         mCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // call create chat method
                 createChat();
             }
         });
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // call finish method
                 finish();
             }
         });
 
+        // call other methods on activity create
         initializeRecyclerView();
         getContactList();
     }
 
     public void createChat(){
+        // get key save to string value
         String key = FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
 
+        // get necessary database references
         DatabaseReference chatInfoDb = FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("info");
         DatabaseReference userDb = FirebaseDatabase.getInstance().getReference().child("user");
 
+        // hash map to put the values and there key  to database
         HashMap newChatMap = new HashMap();
         newChatMap.put("id", key);
         newChatMap.put("timestamp", ServerValue.TIMESTAMP);
         newChatMap.put("users/" + FirebaseAuth.getInstance().getUid(), true);
 
+        // boolean value to be used later
         Boolean validChat = false;
+        //connected to userobject array list connected to the file object / UserObject
+        // for each user in user list that is selected
+        // change boolean to true value
+        // put users + user id into new chat map
+        // set value of the time stamp
         for(UserObject mUser : userList){
             if(mUser.getSelected()){
                 validChat = true;
@@ -88,6 +105,9 @@ public class FindUserActivity extends AppCompatActivity {
             }
         }
 
+        // check if boolean value has changed
+        // if so now we update the table with the values gotten above in new chat map
+        // set time stamp
         if(validChat){
             chatInfoDb.updateChildren(newChatMap);
             userDb.child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(ServerValue.TIMESTAMP);
@@ -97,7 +117,10 @@ public class FindUserActivity extends AppCompatActivity {
 
     private void getContactList(){
 
+        // declare country prefix
         String ISOPrefix = getCountryISO();
+
+        // cursor provides read write access to a databse query
 
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while(phones.moveToNext()){

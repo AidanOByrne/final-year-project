@@ -35,8 +35,10 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
+// not used
 public class ProfileEditFragment extends Fragment implements View.OnClickListener{
 
+    
     ImageView   mBack,
                 mConfirm;
 
@@ -168,6 +170,7 @@ public class ProfileEditFragment extends Fragment implements View.OnClickListene
             getActivity().onBackPressed();
         }
     }
+    // not called 
     private void LogOut() {
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(getActivity(), LauncherActivity.class);
@@ -176,6 +179,7 @@ public class ProfileEditFragment extends Fragment implements View.OnClickListene
         getActivity().finish();
     }
 
+    // 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

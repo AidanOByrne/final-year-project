@@ -27,6 +27,7 @@ import java.util.Collections;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
 
+
     ArrayList<ChatObject> chatList;
     ArrayList<UserObject> userList;
     Context context;

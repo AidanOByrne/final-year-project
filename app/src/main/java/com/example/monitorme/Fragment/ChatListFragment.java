@@ -33,6 +33,7 @@ import java.util.Objects;
 
 public class ChatListFragment extends Fragment {
 
+    // declare variables
     private RecyclerView mChatList;
     private RecyclerView.Adapter mChatListAdapter;
     private RecyclerView.LayoutManager mChatListLayoutManager;
