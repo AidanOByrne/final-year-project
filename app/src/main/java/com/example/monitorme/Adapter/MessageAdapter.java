@@ -26,30 +26,40 @@ import java.util.ArrayList;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
+    // decalre variables
     ArrayList<MessageObject> messageList;
     ChatObject chatObject;
     Context context;
 
+    // initialise message adpater
     public MessageAdapter(Context context, ChatObject chatObject, ArrayList<MessageObject> messageList){
         this.messageList = messageList;
         this.chatObject = chatObject;
         this.context = context;
     }
 
+
     @NonNull
     @Override
+    // creates a new view holder
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // inflates the layout of item message to the view point of the user
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, null, false);
+        // assign layout params for the view
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // set params to view
         layoutView.setLayoutParams(lp);
-
+        // assing it to the rcv
         MessageViewHolder rcv = new MessageViewHolder(layoutView);
+        // return
         return rcv;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MessageViewHolder holder, final int position) {
+        // settting text of view holder
         holder.mMessage.setText(messageList.get(position).getMessage());
+        // for each user in the chat object
         for (UserObject mUser : chatObject.getUserObjectArrayList()) {
             if (mUser.getUid().equals(messageList.get(position).getSenderId())) {
                 String name = mUser.getName();
@@ -58,13 +68,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
         holder.mDate.setText(messageList.get(position).getTimestampStr());
 
+        // new params for the messages
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.mLayout.getLayoutParams();
+        // assign which position the message goes
+        // this is receviing messages
         if(messageList.get(position).getSenderId().equals(FirebaseAuth.getInstance().getUid())){
             params.leftMargin = 100;
             params.rightMargin = 0;
             holder.mLayout.setLayoutParams(params);
             holder.mLayout.setGravity(Gravity.END);
         }else{
+            // this is sending messages
             params.rightMargin = 100;
             params.leftMargin = 0;
             holder.mLayout.setLayoutParams(params);
@@ -73,26 +87,29 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         holder.mSender.setVisibility(View.VISIBLE);
         if (position > 0) {
+            // setting most recent message viewable
             if (messageList.get(position - 1).getSenderId().equals(messageList.get(position).getSenderId())) {
                 holder.mSender.setVisibility(View.GONE);
             }
         }
 
+        // if media list emprty view gone
         if(messageList.get(holder.getAdapterPosition()).getMediaUrlList().isEmpty()){
             holder.mMediaLayout.setVisibility(View.GONE);
         }
         else{
+
             holder.mMediaLayout.setVisibility(View.VISIBLE);
             Glide.with(context)
                     .load(messageList.get(position).getMediaUrlList().get(0))
                     .into(holder.mMedia);
             holder.mMediaAmount.setText(String.valueOf(messageList.get(position).getMediaUrlList().size()));
         }
-
-
+        // set on click listener for media layout
         holder.mMediaLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // get media
                 new ImageViewer.Builder(v.getContext(), messageList.get(holder.getAdapterPosition()).getMediaUrlList())
                         .setStartPosition(0)
                         .show();
@@ -109,6 +126,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
     class MessageViewHolder extends RecyclerView.ViewHolder{
+        // delacre variables
         TextView    mMessage,
                 mSender,
                 mDate,
@@ -118,6 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         LinearLayout mLayout;
         CardView mCard;
         MessageViewHolder(View view){
+            // initialise the variables with the correspnding values based on id
             super(view);
             mLayout = view.findViewById(R.id.layout);
 

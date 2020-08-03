@@ -11,6 +11,9 @@ https://firebase.google.com/docs/reference/android/com/google/firebase/auth/Phon
 https://stackoverflow.com/questions/16670203/set-flash-mode-in-android
 https://stackoverflow.com/questions/6068803/how-to-turn-on-front-flash-light-programmatically-in-android
 https://www.youtube.com/watch?v=gkctZFUH-L4
+https://developer.android.com/reference/android/telephony/TelephonyManager
+https://willowtreeapps.com/ideas/android-fundamentals-working-with-the-recyclerview-adapter-and-viewholder-pattern
+https://stackoverflow.com/questions/30615400/android-recyclerview-adapter-oncreateviewholder-working/30615637
 
  */
 import android.Manifest;

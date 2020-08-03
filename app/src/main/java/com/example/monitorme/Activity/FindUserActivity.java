@@ -120,29 +120,39 @@ public class FindUserActivity extends AppCompatActivity {
         // declare country prefix
         String ISOPrefix = getCountryISO();
 
-        // cursor provides read write access to a databse query
-
+        // cursor provides read write access to a database query
         Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        // while loop to go through all phone numbers
         while(phones.moveToNext()){
+            // get string name and phone number from display name and number
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phone = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
+            // replace undesirables
             phone = phone.replace(" ", "");
             phone = phone.replace("-", "");
             phone = phone.replace("(", "");
             phone = phone.replace(")", "");
 
+            // add iso prefix
+            // country prefix
             if(!String.valueOf(phone.charAt(0)).equals("+"))
                 phone = ISOPrefix + phone;
 
+            // assing m contact with userobject variables
             UserObject mContact = new UserObject("", name, phone, " ", " ");
+            // add the mcontact to contact list
             contactList.add(mContact);
+            // get method for get user details
             getUserDetails(mContact);
         }
     }
     private void getUserDetails(UserObject mContact) {
+        // new db reference
         DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user");
+        // custome query for ordering users by phone number
         Query query = mUserDB.orderByChild("phone").equalTo(mContact.getPhone());
+        // customer query add single event lsitener to get data snapshot
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -150,7 +160,8 @@ public class FindUserActivity extends AppCompatActivity {
                     String  phone = "",
                             name = "",
                             image = "",
-                            status = "Hi there! I'm on whatsApp Clone.";
+                            status = "Hi there! I'm on MonitorMe.";
+                    // get children values depending on the values given, phone = phone etc
                     for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
                         if(childSnapshot.child("phone").getValue()!=null)
                             phone = childSnapshot.child("phone").getValue().toString();
@@ -160,8 +171,7 @@ public class FindUserActivity extends AppCompatActivity {
                             image = childSnapshot.child("image").getValue().toString();
                         if(childSnapshot.child("status").getValue()!=null)
                             status = childSnapshot.child("status").getValue().toString();
-
-
+                        //create user object to iterator through and store values from above
                         UserObject mUser = new UserObject(childSnapshot.getKey(), name, phone, image, status);
                         if (name.equals(phone))
                             for(UserObject mContactIterator : contactList){
@@ -169,8 +179,9 @@ public class FindUserActivity extends AppCompatActivity {
                                     mUser.setName(mContactIterator.getName());
                                 }
                             }
-
+                        /// add muser toarray list
                         userList.add(mUser);
+                            // notify on dat ahcnge checks db for data change
                         mUserListAdapter.notifyDataSetChanged();
                         return;
                     }
@@ -185,6 +196,7 @@ public class FindUserActivity extends AppCompatActivity {
     }
 
     private String getCountryISO(){
+        // gets the countrys prefix number
         String iso = null;
 
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(getApplicationContext().TELEPHONY_SERVICE);
@@ -197,6 +209,7 @@ public class FindUserActivity extends AppCompatActivity {
 
 
     private void initializeRecyclerView() {
+        // initalise all
         mUserList= findViewById(R.id.userList);
         mUserList.setNestedScrollingEnabled(false);
         mUserList.setHasFixedSize(false);

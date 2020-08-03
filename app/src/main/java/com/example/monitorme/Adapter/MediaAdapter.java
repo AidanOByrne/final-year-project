@@ -18,9 +18,11 @@ import java.util.ArrayList;
 
 public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MediaViewHolder>{
 
+    // variables
     ArrayList<String> mediaList;
     Context context;
 
+    // adapter
     public MediaAdapter(Context context, ArrayList<String> mediaList){
         this.context = context;
         this.mediaList = mediaList;
@@ -28,6 +30,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MediaViewHol
 
     @NonNull
     @Override
+    // inflater for view
     public MediaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_media,null, false);
         MediaViewHolder mediaViewHolder = new MediaViewHolder(layoutView);
@@ -51,19 +54,19 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MediaViewHol
     }
 
     @Override
+    // get count of media list
     public int getItemCount() {
         return mediaList.size();
     }
 
-
     public class MediaViewHolder extends RecyclerView.ViewHolder {
-
+        // declare variables
         ImageView mMedia;
-
         FrameLayout mLayout;
 
         public MediaViewHolder(View itemView) {
             super(itemView);
+            // initialise variables depending on xml file
             mMedia = itemView.findViewById(R.id.media);
             mLayout = itemView.findViewById(R.id.layout);
         }

@@ -26,8 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatListViewHolder> {
-
-
+    // same as all adapters just different calls
     ArrayList<ChatObject> chatList;
     ArrayList<UserObject> userList;
     Context context;
@@ -116,8 +115,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
     public int getItemCount() {
         return chatList.size();
     }
-
-
 
     class ChatListViewHolder extends RecyclerView.ViewHolder{
         TextView    mName,
